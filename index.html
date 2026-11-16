@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2b4c7e">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Дворы Петербурга</title>
+</head>
+<body>
+  <header><h1>Дворы Петербурга</h1></header>
+
+  <section class="controls">
+    <label>Сколько гуляем:
+      <select id="hours">
+        <option value="3">3 часа</option>
+        <option value="4">4 часа</option>
+        <option value="5" selected>5 часов</option>
+        <option value="6">6 часов</option>
+        <option value="7">7 часов</option>
+      </select>
+    </label>
+    <label>Район:
+      <select id="district">
+        <option value="all">Любой</option>
+        <option value="center">Центр</option>
+        <option value="petrogradka">Петроградка</option>
+        <option value="vasilievsky">Васильевский остров</option>
+      </select>
+    </label>
+    <label>Время суток:
+      <select id="tod">
+        <option value="auto">По часам сейчас</option>
+        <option value="day">Днём</option>
+        <option value="evening">Вечером</option>
+        <option value="any">Не важно</option>
+      </select>
+    </label>
+    <fieldset class="types">
+      <legend>Что включить</legend>
+      <label><input type="checkbox" value="courtyard" checked> Дворы</label>
+      <label><input type="checkbox" value="park" checked> Парки</label>
+      <label><input type="checkbox" value="exhibition" checked> Выставки</label>
+      <label><input type="checkbox" value="museum"> Музеи</label>
+      <label><input type="checkbox" value="shop" checked> Магазины и рынки</label>
+    </fieldset>
+    <label>Кухня:
+      <select id="cuisine">
+        <option value="any">Любая</option>
+        <option value="georgian">Грузинская</option>
+        <option value="italian">Итальянская</option>
+        <option value="japanese">Японская</option>
+        <option value="russian">Русская</option>
+        <option value="coffee_shop">Кофейня</option>
+      </select>
+    </label>
+    <label>Оценка от:
+      <select id="minRating">
+        <option value="0">Любая</option>
+        <option value="3">3+</option>
+        <option value="4">4+</option>
+        <option value="4.5">4.5+</option>
+      </select>
+    </label>
+    <button id="build">Построить маршрут</button>
+    <button id="random" class="accent">Случайный маршрут</button>
+    <button id="share" class="secondary">Отправить другу</button>
+  </section>
+
+  <div id="updateStatus" style="padding:0 16px;font-size:13px;color:#666"></div>
+  <div id="summary"></div>
+  <div id="map"></div>
+  <ol id="stops"></ol>
+
+  <section class="controls">
+    <fieldset class="car">
+      <legend>Поездка на машине</legend>
+      <label>Сезон:
+        <select id="season">
+          <option value="auto">По дате сейчас</option>
+          <option value="winter">Зима</option>
+          <option value="spring">Весна</option>
+          <option value="summer">Лето</option>
+          <option value="autumn">Осень</option>
+        </select>
+      </label>
+      <label>Не дольше от города:
+        <select id="maxDrive">
+          <option value="30">30 минут</option>
+          <option value="40" selected>40 минут</option>
+          <option value="60">60 минут</option>
+        </select>
+      </label>
+      <button id="carTrip" class="accent">Куда съездить (природа)</button>
+      <button id="ruinTrip" class="accent">Руины снаружи</button>
+      <div id="carResult"></div>
+    </fieldset>
+
+    <fieldset class="rules">
+      <legend>Правила для руин</legend>
+      <ul>
+        <li>Смотрим снаружи, внутрь зданий не заходим.</li>
+        <li>Не лезем через заборы, не заходим за ленту и таблички.</li>
+        <li>Если закрыто или охраняется, едем в другое место.</li>
+        <li>Не ходим в тёмное время и не расходимся.</li>
+        <li>Телефон заряжен, вы сказали близким, куда поехали.</li>
+      </ul>
+    </fieldset>
+  </section>
+
+  <details class="add">
+    <summary>Добавить своё место</summary>
+    <button id="voice" class="secondary">Сказать голосом</button>
+    <input id="newName" placeholder="Название">
+    <select id="newType">
+      <option value="courtyard">Двор</option>
+      <option value="park">Парк</option>
+      <option value="exhibition">Выставка</option>
+      <option value="museum">Музей</option>
+      <option value="shop">Магазин или рынок</option>
+      <option value="nature">Природа (на машине)</option>
+      <option value="ruin">Руины снаружи</option>
+      <option value="cafe">Кафе</option>
+    </select>
+    <input id="newAddress" placeholder="Адрес, например: Литейный проспект 53">
+    <input id="newUntil" type="date" title="До какой даты открыта выставка">
+    <input id="newCuisine" placeholder="Кухня (для кафе)">
+    <input id="newRating" type="number" min="1" max="5" step="0.1" placeholder="Ваша оценка 1-5">
+    <select id="newBest">
+      <option value="any">Время суток: не важно</option>
+      <option value="day">Лучше днём</option>
+      <option value="evening">Лучше вечером</option>
+    </select>
+    <input id="newSpend" type="number" min="0" step="50" placeholder="Сколько потратили, ₽ (необязательно)">
+    <input id="newDrive" type="number" min="5" max="120" placeholder="Минут на машине от города (для природы и руин)">
+    <button id="saveNew">Сохранить</button>
+    <div id="addStatus"></div>
+  </details>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+  </script>
+</body>
+</html>

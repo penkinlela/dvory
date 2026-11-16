@@ -1,0 +1,26 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: -apple-system, Roboto, sans-serif; background: #f4f1ea; color: #222; }
+header { background: #2b4c7e; color: #fff; padding: 14px 16px; }
+h1 { margin: 0; font-size: 20px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 16px; }
+.controls label { flex: 1 1 140px; font-size: 14px; }
+select, button { width: 100%; padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #bbb; }
+button { background: #2b4c7e; color: #fff; border: none; flex: 1 1 140px; }
+button.secondary { background: #8a9bb5; }
+button.accent { background: #c2562b; }
+button.small { width: auto; padding: 4px 10px; font-size: 13px; margin-top: 4px; display: block; }
+button:disabled { opacity: 0.5; }
+#summary { padding: 0 16px 8px; font-weight: 600; }
+#map { height: 45vh; }
+#stops { padding: 12px 16px 32px 36px; }
+#stops li { margin-bottom: 12px; }
+#stops small { color: #666; display: block; }
+.types { border: 1px solid #ccc; border-radius: 8px; flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 8px; }
+.types label { flex: 0 0 auto; }
+.car { border: 1px solid #ccc; border-radius: 8px; flex: 1 1 100%; }
+.rules { border: 2px solid #c2562b; border-radius: 8px; flex: 1 1 100%; font-size: 14px; }
+.add { padding: 12px 16px 40px; }
+.add input, .add select { width: 100%; padding: 10px; margin: 6px 0; font-size: 16px; border-radius: 8px; border: 1px solid #bbb; }
+.add button { margin-top: 6px; }
+#addStatus, #carResult { margin-top: 8px; font-size: 14px; }
+.badge { display: inline-block; background: #c2562b; color: #fff; border-radius: 6px; padding: 1px 6px; font-size: 12px; }
